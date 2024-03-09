@@ -17,7 +17,7 @@ namespace lab3
             InitializeComponent();
         }
 
-        int i;
+        int currentRow;
         string ruleString;
         private Dictionary<(bool, bool, bool), bool> ruleDictionary = new Dictionary<(bool, bool, bool), bool>();
 
@@ -26,9 +26,9 @@ namespace lab3
 
         }
 
-        private bool GetRule(int i)
+        private bool GetRuleFromIndex(int index)
         {
-            if (Convert.ToBoolean(ruleString[i].Equals('0')))
+            if (Convert.ToBoolean(ruleString[index].Equals('0')))
                 return false;
             else
                 return true;
@@ -42,14 +42,14 @@ namespace lab3
             while (ruleString.Length < 8)
                 ruleString = "0" + ruleString;
             ruleDictionary.Clear();
-            ruleDictionary.Add((false, false, false), GetRule(7));
-            ruleDictionary.Add((false, false, true), GetRule(6));
-            ruleDictionary.Add((false, true, false), GetRule(5));
-            ruleDictionary.Add((false, true, true), GetRule(4));
-            ruleDictionary.Add((true, false, false), GetRule(3));
-            ruleDictionary.Add((true, false, true), GetRule(2));
-            ruleDictionary.Add((true, true, false), GetRule(1));
-            ruleDictionary.Add((true, true, true), GetRule(0));
+            ruleDictionary.Add((false, false, false), GetRuleFromIndex(7));
+            ruleDictionary.Add((false, false, true), GetRuleFromIndex(6));
+            ruleDictionary.Add((false, true, false), GetRuleFromIndex(5));
+            ruleDictionary.Add((false, true, true), GetRuleFromIndex(4));
+            ruleDictionary.Add((true, false, false), GetRuleFromIndex(3));
+            ruleDictionary.Add((true, false, true), GetRuleFromIndex(2));
+            ruleDictionary.Add((true, true, false), GetRuleFromIndex(1));
+            ruleDictionary.Add((true, true, true), GetRuleFromIndex(0));
         }
 
         private Label CreateLabel()
@@ -63,9 +63,9 @@ namespace lab3
 
         private void CreateRowNumberLabel(int i)
         {
-            Label RowNumber = CreateLabel();
-            RowNumber.Text = Convert.ToString(i);
-            tableLayoutPanel1.Controls.Add(RowNumber, 0, i);
+            Label RowNumberLabel = CreateLabel();
+            RowNumberLabel.Text = Convert.ToString(i);
+            tableLayoutPanel1.Controls.Add(RowNumberLabel, 0, i);
         }
 
 
@@ -123,11 +123,11 @@ namespace lab3
         {
             for (int k = 1; k < 16; k++)
             {
-                Label l = tableLayoutPanel1.GetControlFromPosition(k, i) as Label;
-                if (PredictCellCondition(k, i))
-                    l.BackColor = Color.Black;
+                Label cellLabel = tableLayoutPanel1.GetControlFromPosition(k, currentRow) as Label;
+                if (PredictCellCondition(k, currentRow))
+                    cellLabel.BackColor = Color.Black;
                 else
-                    l.BackColor = Color.White;
+                    cellLabel.BackColor = Color.White;
             }
         }
 
@@ -145,8 +145,8 @@ namespace lab3
         private void timer1_Tick(object sender, EventArgs e)
         {
             NewIteration();
-            if (i < 15)
-                i++;
+            if (currentRow < 15)
+                currentRow++;
             else
                 timer1.Stop();
         }
@@ -154,7 +154,7 @@ namespace lab3
         private void Form1_Load(object sender, EventArgs e)
         {
             FillTable();
-            i = 1;
+            currentRow = 1;
         }
     }
 }
